@@ -1,69 +1,68 @@
-# 🌱 Smart Irrigation IoT — Streamlit App (Siap Pakai di VSCode)
+# Smart Irrigation IoT — Streamlit UI
 
-Folder proyek ini sudah berisi **seluruh file lengkap** termasuk model Machine Learning yang telah dilatih (`model_irigasi_pintar_streamlit.pkl` dengan **F1-Score Test = 0.8391** vs **Baseline = 0.1575**), data sampel 16 petak rumah kaca, kode antarmuka `app.py`, serta skrip otomatisasi `venv`.
+## Deskripsi Proyek
+Proyek ini merupakan prototipe Sistem Irigasi Pintar berbasis Internet of Things (IoT) dan Machine Learning. Aplikasi antarmuka (UI) ini dikembangkan menggunakan Streamlit untuk memantau dan memprediksi status penyiraman pada 16 petak area rumah kaca secara real-time. Keputusan penyiraman otomatis didasarkan pada inferensi model Machine Learning yang telah dilatih menggunakan data primer dari sensor lingkungan mikro (kelembapan tanah, suhu udara, cuaca, dan curah hujan), guna mengoptimalkan penggunaan air serta mencegah kerugian agronomis.
 
----
-
-## 📁 Struktur Folder Proyek
+## Struktur Direktori Proyek
 
 ```text
 smart_irrigation_vscode/
 ├── .streamlit/
-│   └── config.toml                                 # Tema warna agronomi untuk Streamlit
+│   └── config.toml                        # Konfigurasi parameter tampilan dan tema Streamlit
 ├── .vscode/
-│   ├── launch.json                                 # Konfigurasi Run/Debug F5 di VSCode
-│   ├── settings.json                               # Pengaturan interpreter Python otomatis
-│   └── tasks.json                                  # Task otomatis di VSCode
+│   ├── launch.json                        # Konfigurasi debugging untuk VSCode
+│   ├── settings.json                      # Konfigurasi lingkungan interpreter Python lokal
+│   └── tasks.json                         # Automasi task runner VSCode
 ├── data/
-│   └── sample_greenhouse_16petak.csv               # Data uji 16 petak (P01-P16) untuk Tab Monitor
+│   └── sample_greenhouse_16petak.csv      # Dataset sampel kondisi lingkungan mikro 16 petak 
 ├── notebooks/
-│   └── Kasus_07_Smart_Irrigation_IoT_Optimasi_Lengkap.ipynb  # Notebook Google Colab lengkap
-├── app.py                                          # Aplikasi utama Streamlit (3 Tab Interaktif)
-├── model_irigasi_pintar_streamlit.pkl              # Bundel model ML siap pakai (sudah terlatih)
-├── requirements.txt                                # Daftar library Python untuk lokal & cloud
-├── run_windows.bat                                 # Klik 2x (atau jalankan di terminal) untuk Windows
-├── run_mac_linux.sh                                # Launcher otomatis untuk macOS / Linux
-└── README.md                                       # Panduan penggunaan
+│   └── Kasus_07_Smart_Irrigation_IoT_Optimasi_Lengkap.ipynb  # Notebook eksplorasi dan pelatihan model 
+├── app.py                                 # Skrip utama antarmuka Streamlit
+├── model_irigasi_pintar_streamlit.pkl     # Berkas serialisasi model Machine Learning (pipeline)
+├── requirements.txt                       # Daftar dependensi paket Python
+├── run_windows.bat                        # Skrip eksekusi otomatis untuk platform Windows
+├── run_mac_linux.sh                       # Skrip eksekusi otomatis untuk platform macOS/Linux
+└── README.md                              # Dokumentasi teknis repositori
 ```
 
----
+## Prasyarat dan Eksekusi Lokal
 
-## 🚀 Cara Langsung Menjalankan di VSCode (Hanya 1 Langkah!)
+Aplikasi ini dapat dieksekusi pada lingkungan lokal menggunakan virtual environment Python untuk memastikan isolasi dependensi paket.
 
-### Opsi A — Cara Paling Cepat (Otomatis Buat `venv` + Install + Run)
-1. Ekstrak file `.zip` ini, lalu buka folder **`smart_irrigation_vscode`** di **VSCode** (`File -> Open Folder`).
-2. Buka Terminal di VSCode (`Ctrl + ~`), lalu ketik perintah berikut:
-   - **Windows:**
-     ```cmd
-     .\run_windows.bat
-     ```
-   - **macOS / Linux:**
-     ```bash
-     bash run_mac_linux.sh
-     ```
-   *(Skrip ini akan otomatis membuat folder `venv`, menginstal isi `requirements.txt`, dan membuka website Streamlit di browser Anda!)*
+### Eksekusi Manual (Terminal Bebas)
+Untuk platform non-Windows atau pengaturan manual, jalankan perintah berikut secara berurutan di dalam terminal:
 
-### Opsi B — Cara Manual di Terminal VSCode
 ```bash
-# 1. Buat virtual environment
+# 1. Inisialisasi virtual environment
 python -m venv venv
 
-# 2. Aktifkan virtual environment
+# 2. Aktivasi virtual environment
 # Windows:
 venv\Scripts\activate
 # macOS/Linux:
 source venv/bin/activate
 
-# 3. Install library
+# 3. Instalasi dependensi
 pip install -r requirements.txt
 
-# 4. Jalankan aplikasi Streamlit
+# 4. Inisialisasi peladen aplikasi
 streamlit run app.py
 ```
 
----
+### Eksekusi Otomatis (Skrip Batch - Windows)
+Bagi pengguna sistem operasi Windows, instalasi dan eksekusi dapat dilakukan secara langsung melalui terminal VSCode:
+```cmd
+.\run_windows.bat
+```
+*(Skrip ini akan memvalidasi keberadaan environment, menginstal seluruh dependensi, dan memulai server Streamlit secara otomatis).*
 
-## 🌐 Cara Deploy ke Internet Publik (Streamlit Community Cloud)
-1. Buat repository baru di **GitHub** Anda.
-2. Upload isi folder ini (`app.py`, `model_irigasi_pintar_streamlit.pkl`, `requirements.txt`, folder `.streamlit/`, dan folder `data/`) ke repository GitHub tersebut *(catatan: folder `venv/` tidak perlu ikut di-upload)*.
-3. Buka [share.streamlit.io](https://share.streamlit.io/), klik **New app**, pilih repository GitHub Anda, pastikan Main file path diisi **`app.py`**, lalu klik **Deploy!**
+## Panduan Deployment Publik (Streamlit Community Cloud)
+
+Repositori ini siap untuk integrasi langsung (deployment) ke layanan cloud publik tanpa modifikasi tambahan. 
+1. Inisialisasi repositori baru pada akun **GitHub** Anda.
+2. Lakukan commit dan push untuk berkas serta direktori berikut: `app.py`, `model_irigasi_pintar_streamlit.pkl`, `requirements.txt`, direktori `data/`, dan direktori `.streamlit/`. 
+   *(Catatan: Direktori `venv/` dan berkas sistem konfigurasi lokal tidak perlu diikutsertakan ke dalam repositori).*
+3. Akses layanan [share.streamlit.io](https://share.streamlit.io/) dan lakukan autentikasi menggunakan akun GitHub.
+4. Buat aplikasi baru (**New app**), pilih repositori yang relevan, dan pastikan parameter *Main file path* merujuk pada **`app.py`**.
+5. Pada menu *Advanced settings*, tetapkan versi Python ke **3.11** untuk menjaga kompatibilitas versi library. 
+6. Eksekusi proses deploy.
