@@ -15,7 +15,7 @@ from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_sc
 # ==============================================================================
 st.set_page_config(
     page_title="Smart Irrigation IoT — Greenhouse Lembang",
-    page_icon="🌱",
+    
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -243,7 +243,7 @@ df_sample = muat_data_16petak()
 # ==============================================================================
 # 3. HEADER UTAMA DASHBOARD
 # ==============================================================================
-st.title("🌱 Sistem Keputusan Irigasi Pintar Berbasis IoT (Kasus 07)")
+st.title("Sistem Keputusan Irigasi Pintar Berbasis IoT (Kasus 07)")
 st.markdown(
     "**Klien:** Pengelola Rumah Kaca (*Greenhouse*) Sayuran di Lembang (16 Petak: `P01` s.d. `P16`)  \n"
     "Sistem ini memprediksi secara *real-time* setiap jam apakah suatu petak **perlu disiram sekarang (`1`) atau tidak (`0`)**, "
@@ -253,7 +253,7 @@ st.markdown(
 # ==============================================================================
 # 4. SIDEBAR: KONFIGURASI PETAK & PRESET SKENARIO DEMO
 # ==============================================================================
-st.sidebar.header("⚙️ Panel Kontrol Sensor & Petak")
+st.sidebar.header("Panel Kontrol Sensor & Petak")
 
 preset = st.sidebar.selectbox(
     "Pilih Skenario Demo Cepat:",
@@ -309,25 +309,25 @@ mode_model = st.sidebar.radio(
 )
 
 st.sidebar.markdown("---")
-st.sidebar.caption(f"📦 Bundel Model: `{nama_file_pkl}`")
+st.sidebar.caption(f"Bundel Model: `{nama_file_pkl}`")
 if isinstance(bundel, dict) and "metrics_test" in bundel:
-    st.sidebar.metric("F1-Score Model ML (Test Set)", f"{bundel['metrics_test']['f1_ml_rf']:.4f}", "+0.6816 vs Baseline")
-    st.sidebar.metric("F1-Score Baseline (< 35%)", f"{bundel['metrics_test']['f1_baseline']:.4f}")
+    pass # Removed explicit F1 score display from sidebar per user request
 
 # ==============================================================================
-# 5. NAVIGASI 3 TAB UTAMA
+# 5. NAVIGASI 4 TAB UTAMA
 # ==============================================================================
-tab1, tab2, tab3 = st.tabs([
-    "📡 1. Live Prediction & Simulasi Sensor",
-    "🏡 2. Monitor Serentak 16 Petak (P01–P16)",
-    "📊 3. Evaluasi Model, Baseline & Biaya Bisnis"
+tab1, tab2, tab3, tab4 = st.tabs([
+    "1. Live Prediction & Simulasi Sensor",
+    "2. Monitor Serentak 16 Petak (P01-P16)",
+    "3. Evaluasi Model Baseline",
+    "4. Biaya Bisnis"
 ])
 
 # ==============================================================================
 # TAB 1: LIVE PREDICTION & SIMULASI SENSOR
 # ==============================================================================
 with tab1:
-    st.subheader("📡 Input Pembacaan Sensor IoT & Prakiraan Cuaca")
+    st.subheader("Input Pembacaan Sensor IoT & Prakiraan Cuaca")
     col1, col2, col3 = st.columns(3)
 
     with col1:
@@ -369,7 +369,7 @@ with tab1:
         })
         ambang_tanaman = ambang_kritis_map[(tanaman, jenis_tanah)]
         st.info(
-            f"💡 **Referensi Agronomi:**  \n"
+            f"**Referensi Agronomi:**  \n"
             f"Tanaman **{tanaman.capitalize()}** pada tanah **{jenis_tanah}** memiliki ambang kritis "
             f"kelembapan tanah sekitar **`{ambang_tanaman:.0f}%`**."
         )
@@ -434,7 +434,7 @@ with tab1:
     keputusan_baseline = int(kelembaban_tanah_pct < 35.0)
 
     st.divider()
-    st.subheader(f"🔍 Hasil Keputusan Irigasi — Petak `{petak}` ({tanaman.capitalize()} · Tanah {jenis_tanah.capitalize()})")
+    st.subheader(f"Hasil Keputusan Irigasi — Petak `{petak}` ({tanaman.capitalize()} · Tanah {jenis_tanah.capitalize()})")
 
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Kelembapan Tanah", f"{kelembaban_tanah_pct:.1f}%", f"{kt_diff1:+.1f}% vs 1 jam lalu")
@@ -446,7 +446,7 @@ with tab1:
 
     with col_res1:
         if keputusan_ml == 1:
-            st.error("### 🚨 KEPUTUSAN AI: PERLU DISIRAM SEKARANG (POMPA MENYALA)")
+            st.error("### KEPUTUSAN AI: PERLU DISIRAM SEKARANG (POMPA MENYALA)")
             st.markdown(
                 f"**Alasan Keputusan Agronomi:**  \n"
                 f"1. **Defisit Kelembapan Tanah:** Kelembapan tanah pada petak **{petak}** saat ini (**{kelembaban_tanah_pct:.1f}%**, "
@@ -457,7 +457,7 @@ with tab1:
                 f"3. **Mitigasi Risiko Bisnis:** Menyiram sekarang mencegah tanaman **{tanaman}** mengalami stres kekeringan dan layu."
             )
         else:
-            st.success("### ✅ KEPUTUSAN AI: TIDAK PERLU DISIRAM (POMPA MATI / DITAHAN)")
+            st.success("### KEPUTUSAN AI: TIDAK PERLU DISIRAM (POMPA MATI / DITAHAN)")
             if prakiraan_hujan_6jam_mm >= 1.5 or curah_hujan_mm >= 0.5:
                 st.markdown(
                     f"**Alasan Keputusan Agronomi (Penundaan karena Hujan):**  \n"
@@ -476,9 +476,9 @@ with tab1:
                 )
 
     with col_res2:
-        st.markdown("#### ⚖️ Perbandingan terhadap Baseline Wajib (`< 35%`)")
-        label_base = "🚨 SIRAM (1)" if keputusan_baseline == 1 else "✅ JANGAN SIRAM (0)"
-        label_ai = "🚨 SIRAM (1)" if keputusan_ml == 1 else "✅ JANGAN SIRAM (0)"
+        st.markdown("#### Perbandingan terhadap Baseline Wajib (`< 35%`)")
+        label_base = "SIRAM (1)" if keputusan_baseline == 1 else "JANGAN SIRAM (0)"
+        label_ai = "SIRAM (1)" if keputusan_ml == 1 else "JANGAN SIRAM (0)"
 
         st.table(pd.DataFrame([
             {"Metode": "Aturan Sederhana (Kelembapan < 35%)", "Keputusan": label_base},
@@ -488,13 +488,13 @@ with tab1:
         if keputusan_ml != keputusan_baseline:
             if keputusan_baseline == 1 and keputusan_ml == 0:
                 st.warning(
-                    "🔍 **Keunggulan AI atas Baseline:**  \n"
+                    "**Keunggulan AI atas Baseline:**  \n"
                     "Aturan `< 35%` menyalakan pompa secara kaku hanya karena kelembapan di bawah 35%, "
                     "padahal **akan turun hujan** atau tanah masih aman bagi tanaman. AI mencegah pemborosan air!"
                 )
             else:
                 st.warning(
-                    "🔍 **Keunggulan AI atas Baseline:**  \n"
+                    "**Keunggulan AI atas Baseline:**  \n"
                     f"Aturan `< 35%` gagal mendeteksi bahwa tanaman **{tanaman}** memiliki ambang kritis lebih tinggi "
                     f"(~**{ambang_tanaman:.0f}%**). AI menyalakan penyiraman lebih tepat waktu sebelum tanaman stres!"
                 )
@@ -505,7 +505,7 @@ with tab1:
 # TAB 2: MONITOR SERENTAK 16 PETAK RUMAH KACA (P01 - P16)
 # ==============================================================================
 with tab2:
-    st.subheader("🏡 Pantauan Serentak 16 Petak Rumah Kaca (`P01` – `P16`)")
+    st.subheader("Pantauan Serentak 16 Petak Rumah Kaca (`P01` - `P16`)")
     if df_sample is None or "kt_lag1" not in df_sample.columns:
         st.info("Data sampel 16 petak tidak tersedia.")
     else:
@@ -546,13 +546,29 @@ with tab2:
                 idx = row_idx * 4 + col_idx
                 if idx < len(sub_df):
                     r = sub_df.iloc[idx]
-                    status_ikon = "🚨 SIRAM" if r["Prediksi AI"] == 1 else "✅ AMAN"
+                    status_ikon = "SIRAM (1)" if r["Prediksi AI"] == 1 else "AMAN (0)"
+                    
+                    # Enhanced Design for Monitor Tab
+                    bg_color = "#FFEBEB" if r["Prediksi AI"] == 1 else "#EBF9F1"
+                    border_color = "#FF4B4B" if r["Prediksi AI"] == 1 else "#21C354"
+                    text_color = "#8A0000" if r["Prediksi AI"] == 1 else "#005A20"
+                    
                     with cols_grid[col_idx]:
                         st.markdown(
-                            f"**{r['petak']} · {r['tanaman'].capitalize()} ({r['jenis_tanah']})**  \n"
-                            f"Status AI: **{status_ikon}** (`{r['Probabilitas AI (%)']:.1f}%`)  \n"
-                            f"Kelembapan: `{r['kelembaban_tanah_pct']:.1f}%` (Ambang: `{r['ambang_estimasi']:.0f}%`)  \n"
-                            f"Label Agronom: `{'Siram (1)' if r['perlu_siram']==1 else 'Tidak (0)'}`"
+                            f"""
+                            <div style="background-color: {bg_color}; border: 2px solid {border_color}; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                                <h4 style="margin-top: 0px; margin-bottom: 10px; color: {text_color}; text-align: center;">{r['petak']}</h4>
+                                <div style="font-size: 14px; color: #333333;">
+                                    <b>Tanaman:</b> {r['tanaman'].capitalize()} ({r['jenis_tanah']})<br>
+                                    <b>Status AI:</b> <span style="color: {border_color}; font-weight: bold;">{status_ikon}</span><br>
+                                    <b>Probabilitas:</b> {r['Probabilitas AI (%)']:.1f}%<br>
+                                    <b>Kelembapan:</b> {r['kelembaban_tanah_pct']:.1f}% / <i>{r['ambang_estimasi']:.0f}%</i><br>
+                                    <hr style="margin: 8px 0;">
+                                    <span style="font-size: 12px; color: #666;">Label Asli: {'Siram' if r['perlu_siram']==1 else 'Aman'}</span>
+                                </div>
+                            </div>
+                            """, 
+                            unsafe_allow_html=True
                         )
 
         st.markdown("#### Tabel Detail Pembacaan Sensor 16 Petak")
@@ -567,7 +583,7 @@ with tab2:
 # TAB 3: EVALUASI MODEL, BASELINE & SIMULASI BIAYA BISNIS
 # ==============================================================================
 with tab3:
-    st.subheader("📊 Evaluasi Performa Model pada Test Set Resmi (15–31 Oktober 2025)")
+    st.subheader("Evaluasi Performa Model pada Test Set Resmi (15-31 Oktober 2025)")
     mt = bundel["metrics_test"]
 
     k1, k2, k3, k4 = st.columns(4)
@@ -595,8 +611,12 @@ with tab3:
         plt.tight_layout()
         st.pyplot(fig_imp)
 
-    st.divider()
-    st.subheader("💰 Kalkulator Pertimbangan Biaya Operasional & Agronomi (Cost Trade-off)")
+    
+# ==============================================================================
+# TAB 4: BIAYA BISNIS
+# ==============================================================================
+with tab4:
+    st.subheader("Kalkulator Pertimbangan Biaya Operasional & Agronomi (Cost Trade-off)")
     st.markdown(
         "Sesuai *brief*: **Terlambat menyiram (*False Negative*)** membuat tanaman stres kekeringan, "
         "sedangkan **menyiram tanpa perlu (*False Positive*)** membuang air/listrik dan dapat membuat akar membusuk."
